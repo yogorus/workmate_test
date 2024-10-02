@@ -18,6 +18,7 @@ class KittenViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.action in ["retrieve", "list"]:
             return kitten_api_models.Kitten.objects.all()
+        # Only owners can interact with their cats
         return kitten_api_models.Kitten.objects.filter(owner=self.request.user)
 
 
