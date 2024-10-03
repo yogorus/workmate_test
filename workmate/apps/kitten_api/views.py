@@ -21,8 +21,44 @@ class KittenViewSet(viewsets.ModelViewSet):
         # Only owners can interact with their cats
         return kitten_api_models.Kitten.objects.filter(owner=self.request.user)
 
+    def get_serializer_class(self):
+        if self.action in ["update", "partial_update"]:
+            return kitten_api_serializers.UpdateKittenSerializer
+        if self.action == "create":
+            return kitten_api_serializers.KittenSerializer
+        return kitten_api_serializers.OutputKittenSerializer
+
+    def create(self, request, *args, **kwargs):
+        request.data["owner"] = request.user.pk
+        return super().create(request, *args, **kwargs)
+
 
 class BreedViewSet(viewsets.ReadOnlyModelViewSet):
     model = kitten_api_models.Breed
     serializer_class = kitten_api_serializers.BreedSerializer
     queryset = kitten_api_models.Breed.objects.all()
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    model = kitten_api_models.Review
+
+    def get_permissions(self):
+        if self.action in ["retrieve", "list"]:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
+    def get_queryset(self):
+        if self.action in ["retrieve", "list"]:
+            return kitten_api_models.Review.objects.all()
+        return kitten_api_models.Review.objects.filter(author=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return kitten_api_serializers.ReviewSerializer
+        if self.action in ["update", "partial_update"]:
+            return kitten_api_serializers.UpdateReviewSerializer
+        return kitten_api_serializers.OuputReviewSerializer
+
+    def create(self, request, *args, **kwargs):
+        request.data["author"] = request.user.pk
+        return super().create(request, *args, **kwargs)

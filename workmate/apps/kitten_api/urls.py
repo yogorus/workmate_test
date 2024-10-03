@@ -5,6 +5,7 @@ router = routers.DefaultRouter()
 
 router.register(r"kittens", views.KittenViewSet, "kittens")
 router.register(r"breeds", views.BreedViewSet, "breeds")
+router.register(r"reviews", views.ReviewViewSet, "reviews")
 
 urlpatterns = []
 
