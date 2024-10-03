@@ -28,9 +28,8 @@ class KittenViewSet(viewsets.ModelViewSet):
             return kitten_api_serializers.KittenSerializer
         return kitten_api_serializers.OutputKittenSerializer
 
-    def create(self, request, *args, **kwargs):
-        request.data["owner"] = request.user.pk
-        return super().create(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class BreedViewSet(viewsets.ReadOnlyModelViewSet):
@@ -59,6 +58,5 @@ class ReviewViewSet(viewsets.ModelViewSet):
             return kitten_api_serializers.UpdateReviewSerializer
         return kitten_api_serializers.OuputReviewSerializer
 
-    def create(self, request, *args, **kwargs):
-        request.data["author"] = request.user.pk
-        return super().create(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
