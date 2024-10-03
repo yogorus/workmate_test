@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework",
     "apps.kitten_api",
-    "apps.accounts",
 ]
 
 MIDDLEWARE = [
