@@ -16,6 +16,7 @@ class KittenSerializer(serializers.ModelSerializer):
     class Meta:
         model = kitten_api_models.Kitten
         fields = ["name", "age", "breed", "color", "owner"]
+        read_only_fields = ("owner",)
 
 
 class UpdateKittenSerializer(serializers.ModelSerializer):
@@ -38,6 +39,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = kitten_api_models.Review
         fields = ["author", "kitten", "rating"]
+        read_only_fields = ("author",)
 
     def validate(self, data):
         # Check if the author is not the owner of the kitten
