@@ -22,9 +22,7 @@ class KittenViewSet(viewsets.ModelViewSet):
         return kitten_api_models.Kitten.objects.filter(owner=self.request.user)
 
     def get_serializer_class(self):
-        if self.action in ["update", "partial_update"]:
-            return kitten_api_serializers.UpdateKittenSerializer
-        if self.action == "create":
+        if self.action in ["update", "partial_update", "create"]:
             return kitten_api_serializers.KittenSerializer
         return kitten_api_serializers.OutputKittenSerializer
 
@@ -52,10 +50,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return kitten_api_models.Review.objects.filter(author=self.request.user)
 
     def get_serializer_class(self):
-        if self.action == "create":
+        if self.action in ["update", "partial_update", "create"]:
             return kitten_api_serializers.ReviewSerializer
-        if self.action in ["update", "partial_update"]:
-            return kitten_api_serializers.UpdateReviewSerializer
         return kitten_api_serializers.OuputReviewSerializer
 
     def perform_create(self, serializer):

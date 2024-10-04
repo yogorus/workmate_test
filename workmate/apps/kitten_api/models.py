@@ -1,7 +1,11 @@
 from django.db import models
 from django.db.models import Avg
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+
+alpha_validator = RegexValidator(
+    r"^[a-zA-Z]*$", "Only alphabetic characters are allowed."
+)
 
 
 class Breed(models.Model):
@@ -14,7 +18,7 @@ class Breed(models.Model):
 
 class Kitten(models.Model):
     name = models.CharField(max_length=50, blank=False)
-    color = models.CharField(max_length=50, blank=False)
+    color = models.CharField(max_length=50, blank=False, validators=[alpha_validator])
     age = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(12)])
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="kittens"
