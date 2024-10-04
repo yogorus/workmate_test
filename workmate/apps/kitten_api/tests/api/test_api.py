@@ -165,7 +165,7 @@ def test_reviews(client_user_1, client_user_2, create_breeds, test_kitten_creati
     assert response.status_code == 404
 
     # Test invalid rating
-    response = client_user_1.patch(f'/api/v1/reviews/{test_kitten_creation[0]['id']}/', {"rating": 7})
+    response = client_user_1.patch(f'/api/v1/reviews/1/', {"rating": 7})
     assert response.status_code == 400
 
     # Test kitten rating
