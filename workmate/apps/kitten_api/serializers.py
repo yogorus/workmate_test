@@ -41,9 +41,18 @@ class ReviewSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
+        user = self.context["request"].user
+
         # Check if the author is not the owner of the kitten
-        if data["kitten"].owner == self.context["request"].user:
+        if data["kitten"].owner == user:
             raise ValidationError("You cannot rate your own kitten.")
+
+        # Check if this user already has a review for the same kitten
+        if kitten_api_models.Review.objects.filter(
+            author=user, kitten=data["kitten"]
+        ).exists():
+            raise serializers.ValidationError("You have already reviewed this kitten.")
+
         return super().validate(data)
 
 
